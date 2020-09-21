@@ -33,8 +33,6 @@ build/
 .vscode/
 /src/main/java/cn/ann/HibernateValidateDemoApplication.java
 /src/test/java/cn/ann/HibernateValidateDemoApplicationTests.java
-/.mvn/wrapper/maven-wrapper.jar
-/.mvn/wrapper/maven-wrapper.properties
-/.mvn/wrapper/MavenWrapperDownloader.java
+/.mvn/*
 /mvnw
 /mvnw.cmd
