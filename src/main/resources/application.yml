@@ -1,0 +1,9 @@
+server:
+  port: 8888
+spring:
+  mvc:
+    format:
+      date-time: yyyy-MM-dd
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+    locale: zh_CN
