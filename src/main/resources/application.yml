@@ -5,5 +5,5 @@ spring:
     format:
       date-time: yyyy-MM-dd
   jackson:
-    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+    date-format: yyyy-MM-dd
     locale: zh_CN

@@ -1,9 +1,8 @@
 package cn.ann.valid.validator;
 
-import cn.ann.valid.service.PersonService;
+import cn.ann.service.PersonService;
 import cn.ann.valid.validation.BirthdayValidation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.validation.ConstraintValidator;
@@ -19,7 +18,6 @@ import java.time.LocalDate;
  * @version v1.0
  */
 @Slf4j
-@Component
 public class BirthdayValidator implements ConstraintValidator<BirthdayValidation, LocalDate> {
     @Resource(name = "personService")
     private PersonService service;

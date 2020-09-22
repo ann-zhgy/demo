@@ -1,4 +1,4 @@
-package cn.ann.valid.service;
+package cn.ann.service;
 
 import org.springframework.stereotype.Service;
 
