@@ -1,8 +1,11 @@
 package cn.ann.valid.validator;
 
+import cn.ann.valid.service.PersonService;
 import cn.ann.valid.validation.BirthdayValidation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDate;
@@ -16,16 +19,10 @@ import java.time.LocalDate;
  * @version v1.0
  */
 @Slf4j
+@Component
 public class BirthdayValidator implements ConstraintValidator<BirthdayValidation, LocalDate> {
-    /**
-     * 初始化方法，可以做一些初始化操作
-     *
-     * @param constraintAnnotation {@link BirthdayValidation}
-     */
-    @Override
-    public void initialize(BirthdayValidation constraintAnnotation) {
-        log.info("BirthdayValidation 初始化");
-    }
+    @Resource(name = "personService")
+    private PersonService service;
 
     /**
      * 检验方法。此处校验出生日期和年龄是否匹配
@@ -38,6 +35,8 @@ public class BirthdayValidator implements ConstraintValidator<BirthdayValidation
     public boolean isValid(LocalDate value, ConstraintValidatorContext context) {
         log.info("BirthdayValidation 校验中……");
         log.info("value: {}", value);
+        log.info("service: {}", service);
+        log.info("test: {}", service.test("person service!"));
         return value != null && value.isBefore(LocalDate.now());
     }
 }

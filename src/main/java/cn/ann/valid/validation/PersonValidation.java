@@ -21,6 +21,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Documented
 @Constraint(validatedBy = PersonValidator.class)
+// 需要加在类上面，所以添加 TYPE
 @Target({TYPE, METHOD, FIELD})
 @Retention(RUNTIME)
 public @interface PersonValidation {

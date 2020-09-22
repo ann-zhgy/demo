@@ -13,6 +13,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Description：出生日期验证
+ * 注解里面的内容 抄 其他注解的就行了
  * <p>
  * Date: 2020-9-21 14:48
  *
@@ -20,6 +21,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @version v1.0
  */
 @Documented
+// BirthdayValidator 是验证的逻辑实现
 @Constraint(validatedBy = BirthdayValidator.class)
 @Target({METHOD, FIELD})
 @Retention(RUNTIME)
@@ -32,7 +34,6 @@ public @interface BirthdayValidation {
     @Retention(RUNTIME)
     @Documented
     @interface List {
-
         BirthdayValidation[] value();
     }
 }
