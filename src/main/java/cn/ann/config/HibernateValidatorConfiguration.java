@@ -37,7 +37,7 @@ public class HibernateValidatorConfiguration {
                 // 自定义的 validator 需要注入 SpringConstraintValidatorFactory 才支持 DI，否则注入进去的都是 null
                 .constraintValidatorFactory(new SpringConstraintValidatorFactory(applicationContext.getAutowireCapableBeanFactory()))
                 // 设置validator模式为快速失败返回：就是检验到第一个不符合规则的就不继续检验了，直接返回错误信息
-                .failFast(true)
+//                .failFast(true)
                 .buildValidatorFactory();
 
         return validatorFactory.getValidator();
