@@ -36,7 +36,7 @@ public class Person implements Serializable {
     @Email(message = "email address format is not correct!")
     private String email;
 
-    @BirthdayValidation(message = "birthday is invalid！")
+    @BirthdayValidation(message = "birthday is invalided！")
     @NotNull(message = "birthday must be not null!")
     private LocalDate birthday;
 }

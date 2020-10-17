@@ -61,8 +61,7 @@ public class ValidatorUtils {
      * @param suffix 校验失败的消息之间的间隔
      * @param groups 校验分组，不传入使用 Default.class
      */
-    public static <T> void validate(
-            T entity, String suffix, Class<?>... groups) {
+    public static <T> void validate(T entity, String suffix, Class<?>... groups) {
         validate(null, entity, suffix, groups);
     }
 
@@ -72,9 +71,7 @@ public class ValidatorUtils {
      * @param entity 被校验的实体
      * @param groups 校验分组，不传入使用 Default.class
      */
-    public static <T> void validate(Validator validator,
-                                    T entity,
-                                    Class<?>... groups) {
+    public static <T> void validate(Validator validator, T entity, Class<?>... groups) {
         validate(validator, entity, "", groups);
     }
 
@@ -85,10 +82,7 @@ public class ValidatorUtils {
      * @param suffix 校验失败的消息间隔
      * @param groups 校验分组，不传入使用 Default.class
      */
-    public static <T> void validate(Validator validator,
-                                    T entity,
-                                    String suffix,
-                                    Class<?>... groups) {
+    public static <T> void validate(Validator validator, T entity, String suffix, Class<?>... groups) {
         Contracts.assertNotNull(entity, MESSAGES.validatedObjectMustNotBeNull());
         Set<ConstraintViolation<T>> constraintViolations =
                 getValidator(validator, false).validate(entity, getGroups(groups));
@@ -175,7 +169,8 @@ public class ValidatorUtils {
      * @param propertyName 被校验实体的属性名
      * @return 校验结果 {@link ValidationResult}
      */
-    public static <T> ValidationResult validateProperty(Validator validator, T entity, String propertyName, Class<?>... groups) {
+    public static <T> ValidationResult validateProperty(
+            Validator validator, T entity, String propertyName, Class<?>... groups) {
         Set<ConstraintViolation<T>> constraintViolations = getValidator(validator, false)
                 .validateProperty(entity, propertyName, getGroups(groups));
 
@@ -224,8 +219,7 @@ public class ValidatorUtils {
     }
 
     private static <T> String generateValidateMessage(
-            Set<ConstraintViolation<T>> constraintViolations,
-            String suffix) {
+            Set<ConstraintViolation<T>> constraintViolations, String suffix) {
         Contracts.assertNotNull(suffix, MESSAGES.parameterMustNotBeNull("校验失败的消息之间的间隔"));
         Contracts.assertNotEmpty(constraintViolations, MESSAGES.parameterMustNotBeNull("检验结果"));
         StringBuilder validateError = new StringBuilder();
