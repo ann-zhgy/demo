@@ -9,6 +9,7 @@ import javax.validation.ValidationException;
 import javax.validation.Validator;
 import javax.validation.groups.Default;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,6 +24,12 @@ import static org.hibernate.validator.internal.util.logging.Messages.MESSAGES;
  * @version v1.0
  */
 public class ValidatorUtils {
+    /** 是否包含尾巴：默认不包含 */
+    private static final boolean TAIL = false;
+
+    /** 后缀：默认为 SUFFIX */
+    private static final String SUFFIX = "";
+
     private ValidatorUtils() {
     }
 
@@ -51,7 +58,7 @@ public class ValidatorUtils {
      * @param groups 校验分组，不传入使用 Default.class
      */
     public static <T> void validate(T entity, Class<?>... groups) {
-        validate(null, entity, "", groups);
+        validate(null, entity, SUFFIX, TAIL, groups);
     }
 
     /**
@@ -62,7 +69,18 @@ public class ValidatorUtils {
      * @param groups 校验分组，不传入使用 Default.class
      */
     public static <T> void validate(T entity, String suffix, Class<?>... groups) {
-        validate(null, entity, suffix, groups);
+        validate(null, entity, suffix, TAIL, groups);
+    }
+
+    /**
+     * 执行校验，不通过抛出异常
+     *
+     * @param entity 被校验的实体
+     * @param suffix 校验失败的消息之间的间隔
+     * @param groups 校验分组，不传入使用 Default.class
+     */
+    public static <T> void validateHasTail(T entity, String suffix, Class<?>... groups) {
+        validate(null, entity, suffix, !TAIL, groups);
     }
 
     /**
@@ -72,7 +90,29 @@ public class ValidatorUtils {
      * @param groups 校验分组，不传入使用 Default.class
      */
     public static <T> void validate(Validator validator, T entity, Class<?>... groups) {
-        validate(validator, entity, "", groups);
+        validate(validator, entity, SUFFIX, TAIL, groups);
+    }
+
+    /**
+     * 使用自定义的校验器执行校验，不通过抛出异常
+     *
+     * @param entity 被校验的实体.
+     * @param suffix 后缀
+     * @param groups 校验分组，不传入使用 Default.class
+     */
+    public static <T> void validate(Validator validator, T entity, String suffix, Class<?>... groups) {
+        validate(validator, entity, suffix, TAIL, groups);
+    }
+
+    /**
+     * 使用自定义的校验器执行校验，不通过抛出异常
+     *
+     * @param entity 被校验的实体.
+     * @param suffix 后缀
+     * @param groups 校验分组，不传入使用 Default.class
+     */
+    public static <T> void validateHasTail(Validator validator, T entity, String suffix, Class<?>... groups) {
+        validate(validator, entity, suffix, !TAIL, groups);
     }
 
     /**
@@ -80,14 +120,21 @@ public class ValidatorUtils {
      *
      * @param entity 被校验的实体
      * @param suffix 校验失败的消息间隔
+     * @param hasTail 最后一个校验结果是否要后缀
      * @param groups 校验分组，不传入使用 Default.class
      */
-    public static <T> void validate(Validator validator, T entity, String suffix, Class<?>... groups) {
+    public static <T> void validate(Validator validator, T entity, String suffix, boolean hasTail, Class<?>... groups) {
         Contracts.assertNotNull(entity, MESSAGES.validatedObjectMustNotBeNull());
+        Contracts.assertNotNull(hasTail, MESSAGES.parameterMustNotBeNull("hasTail"));
         Set<ConstraintViolation<T>> constraintViolations =
                 getValidator(validator, false).validate(entity, getGroups(groups));
         if (constraintViolations.size() > 0) {
-            String validateError = generateValidateMessage(constraintViolations, suffix);
+            String validateError;
+            if (hasTail) {
+                validateError = generateValidateMessage(constraintViolations, suffix);
+            } else {
+                validateError = generateValidateMessageNoTail(constraintViolations, suffix);
+            }
 
             throw new ValidationException(validateError);
         }
@@ -100,7 +147,7 @@ public class ValidatorUtils {
      * @param groups 校验分组，不传入使用 Default.class
      */
     public static <T> void validateFast(T entity, Class<?>... groups) {
-        validateFast(entity, "", groups);
+        validateFast(entity, SUFFIX, groups);
     }
 
     /**
@@ -111,7 +158,7 @@ public class ValidatorUtils {
      * @param groups 校验分组，不传入使用 Default.class
      */
     public static <T> void validateFast(T entity, String suffix, Class<?>... groups) {
-        validate(VALIDATOR_FAST, entity, suffix, groups);
+        validate(VALIDATOR_FAST, entity, suffix, true, groups);
     }
 
     /**
@@ -178,6 +225,47 @@ public class ValidatorUtils {
     }
 
     /**
+     * 获取没有 path 的 ConstraintViolation 的异常消息，可自定义后缀
+     *
+     * @param constraintViolations ConstraintViolation 集合
+     * @param suffix 后缀
+     * @return 异常消息
+     */
+    public static <T> String getConstraintViolationMessageNoPath(
+            Set<ConstraintViolation<?>> constraintViolations, String suffix) {
+        Contracts.assertNotNull(suffix, MESSAGES.parameterMustNotBeNull("constraintViolations"));
+        Contracts.assertNotEmpty(constraintViolations, MESSAGES.parameterMustNotBeNull("suffix"));
+        StringBuilder validateError = new StringBuilder();
+        for (ConstraintViolation<?> constraintViolation : constraintViolations) {
+            validateError.append(constraintViolation.getMessage())
+                    .append(suffix);
+        }
+        return validateError.toString();
+    }
+
+    /**
+     * 获取没有 path 的 ConstraintViolation 的异常消息，可自定义后缀——没有尾巴
+     *
+     * @param constraintViolations ConstraintViolation 集合
+     * @param suffix 后缀
+     * @return 异常消息
+     */
+    public static <T> String getConstraintViolationMessageNoPathNoTail(
+            Set<ConstraintViolation<?>> constraintViolations, String suffix) {
+        Contracts.assertNotNull(suffix, MESSAGES.parameterMustNotBeNull("constraintViolations"));
+        Contracts.assertNotEmpty(constraintViolations, MESSAGES.parameterMustNotBeNull("suffix"));
+        StringBuilder validateError = new StringBuilder();
+        Iterator<ConstraintViolation<?>> iterator = constraintViolations.iterator();
+        while (iterator.hasNext()) {
+            validateError.append(iterator.next().getMessage());
+            if (iterator.hasNext()) {
+                validateError.append(suffix);
+            }
+        }
+        return validateError.toString();
+    }
+
+    /**
      * 将校验结果封装返回
      *
      * @param validateSet 校验结果集合 {@link Set<ConstraintViolation>}
@@ -226,6 +314,21 @@ public class ValidatorUtils {
         for (ConstraintViolation<T> constraintViolation : constraintViolations) {
             validateError.append(constraintViolation.getMessage())
                     .append(suffix);
+        }
+        return validateError.toString();
+    }
+
+    private static <T> String generateValidateMessageNoTail(
+            Set<ConstraintViolation<T>> constraintViolations, String suffix) {
+        Contracts.assertNotNull(suffix, MESSAGES.parameterMustNotBeNull("校验失败的消息之间的间隔"));
+        Contracts.assertNotEmpty(constraintViolations, MESSAGES.parameterMustNotBeNull("检验结果"));
+        StringBuilder validateError = new StringBuilder();
+        Iterator<ConstraintViolation<T>> iterator = constraintViolations.iterator();
+        while (iterator.hasNext()) {
+            validateError.append(iterator.next().getMessage());
+            if (iterator.hasNext()) {
+                validateError.append(suffix);
+            }
         }
         return validateError.toString();
     }

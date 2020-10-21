@@ -12,7 +12,7 @@
     <artifactId>hibernate-validate-demo</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>hibernate-validate-demo</name>
-    <description>spring mvc 使用 hibernate-validate 校验的 demo</description>
+    <description>hibernate-validate 使用案例</description>
 
     <properties>
         <skipTests>true</skipTests>

@@ -66,6 +66,14 @@ public class ValidationResult {
         return builder.toString();
     }
 
+    public String getErrorMsgStrHasTail(String suffix) {
+        StringBuilder builder = new StringBuilder();
+        errorMsg.forEach((s, s2) -> {
+            builder.append(s2);
+        });
+        return builder.toString();
+    }
+
     public void setErrorMsg(Map<String, String> errorMsg) {
         this.errorMsg = errorMsg;
     }

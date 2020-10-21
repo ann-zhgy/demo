@@ -31,7 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-/src/test/java/cn/ann/HibernateValidateDemoApplicationTests.java
-/.mvn/*
-/mvnw
-/mvnw.cmd
