@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>cn.ann</groupId>
-    <artifactId>hibernate-validate-demo</artifactId>
+    <artifactId>restful-demo</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>hibernate-validate-demo</name>
-    <description>hibernate-validate 使用案例</description>
+    <name>restful-demo</name>
+    <description>restful 风格接口案例</description>
 
     <properties>
         <skipTests>true</skipTests>
@@ -24,10 +24,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

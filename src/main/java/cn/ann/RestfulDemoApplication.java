@@ -12,10 +12,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @version v1.0
  */
 @SpringBootApplication
-public class HibernateValidateDemoApplication {
+public class RestfulDemoApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(HibernateValidateDemoApplication.class, args);
+        SpringApplication.run(RestfulDemoApplication.class, args);
     }
 
 }
