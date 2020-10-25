@@ -1,5 +1,7 @@
 server:
   port: 8888
+  servlet:
+    context-path: /
 spring:
   mvc:
     format:
@@ -7,3 +9,9 @@ spring:
   jackson:
     date-format: yyyy-MM-dd
     locale: zh_CN
+springfox:
+  documentation:
+    swagger:
+      v2:
+        enabled: true
+

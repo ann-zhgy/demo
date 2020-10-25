@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESTFul test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link rel="stylesheet" href="./index.css">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.21.0/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/vue"></script>-->
+</head>
+
+<body>
+<div id="app" class="basic-grey" style="margin-top: 40px;">
+    <div class="STYLE-NAME">
+        <h1>测试使用JS发送携带请求体的GET请求
+            <span>请填写查询条件</span>
+        </h1>
+
+        <label>
+            <span>minAge</span>
+            <input type="number" id="minAge" value="20"/>
+        </label>
+
+        <label>
+            <span>maxAge</span>
+            <input type="number" id="maxAge" value="40"/>
+        </label>
+
+        <label>
+            <span>&nbsp;</span>
+            <button type="button" class="button" onclick="submit()">发送</button>
+        </label>
+    </div>
+</div>
+</body>
+<script>
+    function submit() {
+        const url = "http://localhost:8888/rest/person";
+        let minAge = $("#minAge").val();
+        let maxAge = $("#maxAge").val();
+        let param = {
+            minAge: minAge === "" ? 0 : Number(minAge),
+            maxAge: maxAge === "" ? 0 : Number(maxAge)
+        }
+
+        console.log(`param = ${JSON.stringify(param)}`);
+
+        // 方法1，使用原生的XMLHttpRequest，get请求，send传数据
+        let xhr = new XMLHttpRequest();
+        xhr.addEventListener("load", function () {
+            console.log("XMLHttpRequest: " + this.responseText);
+        });
+        xhr.open('GET', url);
+        xhr.withCredentials = false;
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("Accept", "*/*");
+        xhr.setRequestHeader("Cache-Control", "no-cache");
+        xhr.setRequestHeader("Postman-Token", "7c8c5c5f-effc-4cbb-a5c9-6e3f72c554a6,2bc402e6-9654-4f13-9e7e-33550bed91bc");
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.send(JSON.stringify(param));
+
+        fetchRequest(url, 'GET', param)
+            .then(value => console.log(`fetch: ${JSON.stringify(value)}`))
+            .catch(err => console.error(`fetch: ${err}`));
+
+        $.ajax({
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            },
+            url: url,
+            type: "GET",
+            data: param,
+            dataType: "json",
+            success: data => {
+                console.log(`jquery: ${JSON.stringify(data)}`);
+            },
+            error: err => {
+                console.error(`jquery: ${err}`);
+            }
+        });
+
+        axios.get(url, {
+            data: param,
+            headers: {
+                "Content-Type": "application/json;charset=utf-8"
+            }
+        }).then(value => console.log(`axios: ${JSON.stringify(value.data)}`))
+            .catch(reason => console.error(`axios: ${reason}`));
+    }
+
+    function fetchRequest(url, method, data) {
+        // Default options are marked with *
+        return fetch(url, {
+            body: JSON.stringify(data), // must match 'Content-Type' header
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, same-origin, *omit
+            headers: {
+                'user-agent': 'Mozilla/4.0 MDN Example',
+                'content-type': 'application/json'
+            },
+            method: method, // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, cors, *same-origin
+            redirect: 'follow', // manual, *follow, error
+            referrer: 'no-referrer', // *client, no-referrer
+        }).then(response => response.json()) // parses response to JSON
+    }
+</script>
+
+</html>
