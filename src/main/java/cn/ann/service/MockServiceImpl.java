@@ -5,8 +5,8 @@ import cn.ann.common.exception.BusinessException;
 import cn.ann.dto.PersonDTO;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.util.StrUtil;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -111,7 +111,7 @@ public class MockServiceImpl implements IMockService {
             if (dto.getId() != null) {
                 return dto.getId().equals(person.getId());
             }
-            if (StringUtils.isEmpty(dto.getName())) {
+            if (!StrUtil.isEmpty(dto.getName())) {
                 if (!person.getName().contains(dto.getName())) {
                     return false;
                 }
@@ -121,7 +121,7 @@ public class MockServiceImpl implements IMockService {
                     return false;
                 }
             }
-            if (StringUtils.isEmpty(dto.getEmail())) {
+            if (!StrUtil.isEmpty(dto.getEmail())) {
                 if (!person.getEmail().equals(dto.getEmail())) {
                     return false;
                 }

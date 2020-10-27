@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class WebConfiguration {
     @ExceptionHandler({BusinessException.class})
     public ResponseResult<Void> handle(BusinessException ex) {
+        ex.printStackTrace();
         return ResponseResult.error(ResponseResult.ResponseCode.BUSINESS_ERROR, ex.getMessage());
     }
 
     @ExceptionHandler({Exception.class})
     public ResponseResult<Void> handle(Exception ex) {
+        ex.printStackTrace();
         return ResponseResult.error(ResponseResult.ResponseCode.SYSTEM_ERROR, ex.getMessage());
     }
 
