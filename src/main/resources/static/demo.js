@@ -21,6 +21,6 @@ function sendGetRequestWithBody(url, body) {
 }
 
 let url = 'http://localhost:8888/rest/person';
-sendGetRequestWithBody(url, {minAge: 20, maxAge: 40}).then(value => {
-    console.log(value);
-}).catch(reason => console.log(reason))
+sendGetRequestWithBody(url, {minAge: 20, maxAge: 40})
+    .then(value => console.log(value))
+    .catch(reason => console.log(reason))
